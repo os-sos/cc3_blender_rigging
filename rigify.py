@@ -100,8 +100,6 @@ BONE_MAPPINGS = [
 
     ["eye.R", "CC_Base_R_Eye", ""],
     ["eye.L", "CC_Base_L_Eye", ""],
-
-
 ]
 
 # relative mappings: calculate the head/tail position of the first index,
