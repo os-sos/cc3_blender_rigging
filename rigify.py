@@ -553,10 +553,11 @@ def get_eye_material_slot(obj, right_eye):
 
 
 def do_test():
-    cc3_rig = utils.find_cc3_rig()
-    for obj in cc3_rig.children:
-        if "base_body" in obj.name.lower():
-            map_uv_targets(obj)
+    #cc3_rig = utils.find_cc3_rig()
+    #for obj in cc3_rig.children:
+    #    if "base_body" in obj.name.lower():
+    #        map_uv_targets(obj)
+    pass
 
 
 def map_bone(src_rig, dst_rig, mapping):
