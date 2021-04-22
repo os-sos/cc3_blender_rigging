@@ -2,6 +2,8 @@
 
 Experimental rigging for cc3 characters with rigify...
 
+**Must have Rigigy enabled**
+
 "CC3 Rigging" Tab in the 'N' tools panel.
 
 Currently sets up and aligns the meta rig with the cc3 rig including the face rig.
