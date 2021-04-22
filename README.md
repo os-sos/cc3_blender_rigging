@@ -2,7 +2,7 @@
 
 Experimental rigging for cc3 characters with rigify...
 
-**Must have Rigigy enabled**
+**Must have Rigify enabled**
 
 "CC3 Rigging" Tab in the 'N' tools panel.
 
