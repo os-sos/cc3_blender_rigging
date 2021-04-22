@@ -7,3 +7,7 @@ Experimental rigging for cc3 characters with rigify...
 Currently sets up and aligns the meta rig with the cc3 rig including the face rig.
 
 Doesn't do anything with the vertex weights.
+
+This is what it does so far:
+https://youtu.be/lIYMxf9Us4U
+
