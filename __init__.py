@@ -15,7 +15,7 @@ from . import geom
 bl_info = {
     "name": "CC3 Rigging",
     "author": "Victor Soupday",
-    "version": (0, 1, 0),
+    "version": (0, 1, 1),
     "blender": (2, 80, 0),
     "category": "Rigging",
     "location": "3D View > Properties> CC3 Rigging",

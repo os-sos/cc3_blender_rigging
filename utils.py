@@ -28,6 +28,7 @@ def get_active_object():
 
 def set_active_object(obj):
     bpy.context.view_layer.objects.active = obj
+    return bpy.context.active_object == obj
 
 
 def set_mode(mode):
@@ -42,6 +43,12 @@ def set_mode(mode):
             log_error("Unable to set " + mode + " on object: " + bpy.context.object.name)
             return False
         return True
+
+
+def edit_mode_to(obj):
+    if set_mode("OBJECT") and set_active_object(obj) and set_mode("EDIT"):
+        return True
+    return False
 
 
 def find_cc3_rig():

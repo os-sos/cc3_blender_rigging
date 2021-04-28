@@ -10,7 +10,7 @@ from . import geom
 BONE_MAPPINGS = [
     # Spine, Neck & Head:
     # spine chain
-    ["spine", "CC_Base_Pelvis", ""],
+    ["spine", "CC_Base_Hip", ""],
     ["spine.001", "CC_Base_Waist", ""],
     ["spine.002", "CC_Base_Spine01", ""],
     ["spine.003", "CC_Base_Spine02", "-CC_Base_NeckTwist01"],
@@ -18,18 +18,23 @@ BONE_MAPPINGS = [
     ["spine.005", "CC_Base_NeckTwist02", ""],
     ["spine.006", "CC_Base_Head", "CC_Base_Head"], # special case
     ["face", "CC_Base_FacialBone", "CC_Base_FacialBone"], # special case
+    ["pelvis", "CC_Base_Pelvis", "CC_Base_Pelvis"],
 
     # Left Breast
-    ["breast.L", "CC_Base_L_Breast", "CC_Base_L_Breast"], # special case
+    #["breast.L", "CC_Base_L_RibsTwist", "CC_Base_L_Breast"],
     # Right Breast
-    ["breast.R", "CC_Base_R_Breast", "CC_Base_R_Breast"], # special case
+    #["breast.R", "CC_Base_R_RibsTwist", "CC_Base_R_Breast"],
+
+    # Left Breast
+    ["breast.L", "CC_Base_L_Breast", "CC_Base_L_Breast"],
+    # Right Breast
+    ["breast.R", "CC_Base_R_Breast", "CC_Base_R_Breast"],
 
     # Left Leg:
-    ["pelvis.L", "CC_Base_Pelvis", ""],
     ["thigh.L", "CC_Base_L_Thigh", ""],
     ["shin.L", "CC_Base_L_Calf", ""],
     ["foot.L", "CC_Base_L_Foot", ""],
-    ["toe.L", "CC_Base_L_ToeBaseShareBone", "CC_Base_L_ToeBaseShareBone"],
+    ["toe.L", "CC_Base_L_ToeBase", "CC_Base_L_ToeBase"],
 
     # Left Arm:
     ["shoulder.L", "CC_Base_L_Clavicle", "CC_Base_L_Clavicle"],
@@ -59,11 +64,10 @@ BONE_MAPPINGS = [
     ["f_pinky.03.L", "CC_Base_L_Pinky3", "CC_Base_L_Pinky3"],
 
     # Right Leg, chain
-    ["pelvis.R", "CC_Base_Pelvis", ""],
     ["thigh.R", "CC_Base_R_Thigh", ""],
     ["shin.R", "CC_Base_R_Calf", ""],
     ["foot.R", "CC_Base_R_Foot", ""],
-    ["toe.R", "CC_Base_R_ToeBaseShareBone", "CC_Base_R_ToeBaseShareBone"],
+    ["toe.R", "CC_Base_R_ToeBase", "CC_Base_R_ToeBase"],
 
     # Right Arm:
     ["shoulder.R", "CC_Base_R_Clavicle", "CC_Base_R_Clavicle"],
@@ -108,11 +112,182 @@ BONE_MAPPINGS = [
 #     may need to specify a minimum box dimension to avoid flat boxes.
 # after everything else has been placed, restore the relative mappings
 RELATIVE_MAPPINGS = [
-    ["pelvis.L", "TAIL", "spine", "spine.001", "spine.002", "thigh.R", "thigh.L"],
-    ["pelvis.R", "TAIL", "spine", "spine.001", "spine.002", "thigh.R", "thigh.L"],
     ["heel.02.L", "BOTH", "foot.L", "toe.L"],
     ["heel.02.R", "BOTH", "foot.R", "toe.R"],
 ]
+
+# additional deformation bones to copy from the cc3 rig to the generated rigify deformation bones.
+# [cc3_source_bone, new_rigify_def_bone, rigify_parent, flags]
+# flags C=Connected, L=Local location, R=Inherit rotation
+ADD_DEF_BONES = [
+
+    ["CC_Base_L_RibsTwist", "DEF-breast_twist.L", "ORG-breast.L", "LR"],
+    ["CC_Base_R_RibsTwist", "DEF-breast_twist.R", "ORG-breast.R", "LR"],
+    # "-" tells it to re-parent the existing DEF-breast bones to the new DEF-breast_twist bones.
+    ["-", "DEF-breast.L", "DEF-breast_twist.L", "LR"],
+    ["-", "DEF-breast.R", "DEF-breast_twist.R", "LR"],
+
+    ["CC_Base_L_UpperarmTwist01", "DEF-upper_arm_twist.L", "DEF-upper_arm.L", "LR"],
+    ["CC_Base_L_UpperarmTwist02", "DEF-upper_arm_twist.L.001", "DEF-upper_arm.L.001", "LR"],
+    ["CC_Base_L_ElbowShareBone", "DEF-elbow_share.L", "DEF-forearm.L", "LR"],
+    ["CC_Base_L_ForearmTwist01", "DEF-forearm_twist.L", "DEF-forearm.L", "LR"],
+    ["CC_Base_L_ForearmTwist02", "DEF-forearm_twist.L.001", "DEF-forearm.L.001", "LR"],
+
+    ["CC_Base_L_ThighTwist01", "DEF-thigh_twist.L", "DEF-thigh.L", "LR"],
+    ["CC_Base_L_ThighTwist02", "DEF-thigh_twist.L.001", "DEF-thigh.L.001", "LR"],
+    ["CC_Base_L_KneeShareBone", "DEF-knee_share.L", "DEF-shin.L", "LR"],
+    ["CC_Base_L_CalfTwist01", "DEF-shin_twist.L", "DEF-shin.L", "LR"],
+    ["CC_Base_L_CalfTwist02", "DEF-shin_twist.L.001", "DEF-shin.L.001", "LR"],
+
+    ["CC_Base_L_BigToe1", "DEF-toe_big.L", "DEF-toe.L", "LR"],
+    ["CC_Base_L_IndexToe1", "DEF-toe_index.L", "DEF-toe.L", "LR"],
+    ["CC_Base_L_MidToe1", "DEF-toe_mid.L", "DEF-toe.L", "LR"],
+    ["CC_Base_L_RingToe1", "DEF-toe_ring.L", "DEF-toe.L", "LR"],
+    ["CC_Base_L_PinkyToe1", "DEF-toe_pinky.L", "DEF-toe.L", "LR"],
+
+
+    ["CC_Base_R_UpperarmTwist01", "DEF-upper_arm_twist.R", "DEF-upper_arm.R", "LR"],
+    ["CC_Base_R_UpperarmTwist02", "DEF-upper_arm_twist.R.001", "DEF-upper_arm.R.001", "LR"],
+    ["CC_Base_R_ElbowShareBone", "DEF-elbow_share.R", "DEF-forearm.R", "LR"],
+    ["CC_Base_R_ForearmTwist01", "DEF-forearm_twist.R", "DEF-forearm.R", "LR"],
+    ["CC_Base_R_ForearmTwist02", "DEF-forearm_twist.R.001", "DEF-forearm.R.001", "LR"],
+
+    ["CC_Base_R_ThighTwist01", "DEF-thigh_twist.R", "DEF-thigh.R", "LR"],
+    ["CC_Base_R_ThighTwist02", "DEF-thigh_twist.R.001", "DEF-thigh.R.001", "LR"],
+    ["CC_Base_R_KneeShareBone", "DEF-knee_share.R", "DEF-shin.R", "LR"],
+    ["CC_Base_R_CalfTwist01", "DEF-shin_twist.R", "DEF-shin.R", "LR"],
+    ["CC_Base_R_CalfTwist02", "DEF-shin_twist.R.001", "DEF-shin.R.001", "LR"],
+
+    ["CC_Base_R_BigToe1", "DEF-toe_big.R", "DEF-toe.R", "LR"],
+    ["CC_Base_R_IndexToe1", "DEF-toe_index.R", "DEF-toe.R", "LR"],
+    ["CC_Base_R_MidToe1", "DEF-toe_mid.R", "DEF-toe.R", "LR"],
+    ["CC_Base_R_RingToe1", "DEF-toe_ring.R", "DEF-toe.R", "LR"],
+    ["CC_Base_R_PinkyToe1", "DEF-toe_pinky.R", "DEF-toe.R", "LR"],
+]
+
+VERTEX_GROUP_RENAME = [
+    # Spine, Neck & Head:
+    # spine chain
+    ["DEF-spine", "CC_Base_Hip"],
+    ["DEF-spine.001", "CC_Base_Waist"],
+    ["DEF-spine.002", "CC_Base_Spine01"],
+    ["DEF-spine.003", "CC_Base_Spine02"],
+    ["DEF-spine.004", "CC_Base_NeckTwist01"],
+    ["DEF-spine.005", "CC_Base_NeckTwist02"],
+    ["DEF-spine.006", "CC_Base_Head"], # special case
+    ["DEF-pelvis", "CC_Base_Pelvis"],
+
+    ["DEF-breast_twist.L", "CC_Base_L_RibsTwist"],
+    ["DEF-breast_twist.R", "CC_Base_R_RibsTwist"],
+
+    # Left Breast
+    ["DEF-breast.L", "CC_Base_L_Breast"], # special case
+    # Right Breast
+    ["DEF-breast.R", "CC_Base_R_Breast"], # special case
+
+    # Left Leg:
+    ["DEF-thigh.L", "CC_Base_L_Thigh"],
+    ["DEF-thigh_twist.L", "CC_Base_L_ThighTwist01"],
+    ["DEF-thigh_twist.L.001", "CC_Base_L_ThighTwist02"],
+    ["DEF-knee_share.L", "CC_Base_L_KneeShareBone"],
+    ["DEF-shin.L", "CC_Base_L_Calf"],
+    ["DEF-shin_twist.L", "CC_Base_L_CalfTwist01"],
+    ["DEF-shin_twist.L.001", "CC_Base_L_CalfTwist02"],
+    ["DEF-foot.L", "CC_Base_L_Foot"],
+    ["DEF-toe.L", "CC_Base_L_ToeBase"],
+
+    ["DEF-toe_big.L", "CC_Base_L_BigToe1"],
+    ["DEF-toe_index.L", "CC_Base_L_IndexToe1"],
+    ["DEF-toe_mid.L", "CC_Base_L_MidToe1"],
+    ["DEF-toe_ring.L", "CC_Base_L_RingToe1"],
+    ["DEF-toe_pinky.L", "CC_Base_L_PinkyToe1"],
+
+    # Left Arm:
+    ["DEF-shoulder.L", "CC_Base_L_Clavicle"],
+    # chain
+    ["DEF-upper_arm.L", "CC_Base_L_Upperarm"],
+    ["DEF-upper_arm_twist.L", "CC_Base_L_UpperarmTwist01"],
+    ["DEF-upper_arm_twist.L.001", "CC_Base_L_UpperarmTwist02"],
+    ["DEF-elbow_share.L", "CC_Base_L_ElbowShareBone"],
+    ["DEF-forearm.L", "CC_Base_L_Forearm"],
+    ["DEF-forearm_twist.L", "CC_Base_L_ForearmTwist01"],
+    ["DEF-forearm_twist.L.001", "CC_Base_L_ForearmTwist02"],
+    ["DEF-hand.L", "CC_Base_L_Hand"],
+    # Left Hand Fingers, chains
+    ["DEF-thumb.01.L", "CC_Base_L_Thumb1"],
+    ["DEF-f_index.01.L", "CC_Base_L_Index1"],
+    ["DEF-f_middle.01.L", "CC_Base_L_Mid1"],
+    ["DEF-f_ring.01.L", "CC_Base_L_Ring1"],
+    ["DEF-f_pinky.01.L", "CC_Base_L_Pinky1"],
+    ["DEF-thumb.02.L", "CC_Base_L_Thumb2"],
+    ["DEF-f_index.02.L", "CC_Base_L_Index2"],
+    ["DEF-f_middle.02.L", "CC_Base_L_Mid2"],
+    ["DEF-f_ring.02.L", "CC_Base_L_Ring2"],
+    ["DEF-f_pinky.02.L", "CC_Base_L_Pinky2"],
+    ["DEF-thumb.03.L", "CC_Base_L_Thumb3"],
+    ["DEF-f_index.03.L", "CC_Base_L_Index3"],
+    ["DEF-f_middle.03.L", "CC_Base_L_Mid3"],
+    ["DEF-f_ring.03.L", "CC_Base_L_Ring3"],
+    ["DEF-f_pinky.03.L", "CC_Base_L_Pinky3"],
+
+    # Right Leg, chain
+    ["DEF-thigh.R", "CC_Base_R_Thigh"],
+    ["DEF-thigh_twist.R", "CC_Base_R_ThighTwist01"],
+    ["DEF-thigh_twist.R.001", "CC_Base_R_ThighTwist02"],
+    ["DEF-knee_share.R", "CC_Base_R_KneeShareBone"],
+    ["DEF-shin.R", "CC_Base_R_Calf"],
+    ["DEF-shin_twist.R", "CC_Base_R_CalfTwist01"],
+    ["DEF-shin_twist.R.001", "CC_Base_R_CalfTwist02"],
+    ["DEF-foot.R", "CC_Base_R_Foot"],
+    ["DEF-toe.R", "CC_Base_R_ToeBase"],
+
+    ["DEF-toe_big.R", "CC_Base_R_BigToe1"],
+    ["DEF-toe_index.R", "CC_Base_R_IndexToe1"],
+    ["DEF-toe_mid.R", "CC_Base_R_MidToe1"],
+    ["DEF-toe_ring.R", "CC_Base_R_RingToe1"],
+    ["DEF-toe_pinky.R", "CC_Base_R_PinkyToe1"],
+
+    # Right Arm:
+    ["DEF-shoulder.R", "CC_Base_R_Clavicle"],
+    # chain
+    ["DEF-upper_arm.R", "CC_Base_R_Upperarm"],
+    ["DEF-upper_arm_twist.R", "CC_Base_R_UpperarmTwist01"],
+    ["DEF-upper_arm_twist.R.001", "CC_Base_R_UpperarmTwist02"],
+    ["DEF-elbow_share.R", "CC_Base_R_ElbowShareBone"],
+    ["DEF-forearm.R", "CC_Base_R_Forearm"],
+    ["DEF-forearm_twist.R", "CC_Base_R_ForearmTwist01"],
+    ["DEF-forearm_twist.R.001", "CC_Base_R_ForearmTwist02"],
+    ["DEF-hand.R", "CC_Base_R_Hand"],
+    # Right Hand Fingers, chains
+    ["DEF-thumb.01.R", "CC_Base_R_Thumb1"],
+    ["DEF-f_index.01.R", "CC_Base_R_Index1"],
+    ["DEF-f_middle.01.R", "CC_Base_R_Mid1"],
+    ["DEF-f_ring.01.R", "CC_Base_R_Ring1"],
+    ["DEF-f_pinky.01.R", "CC_Base_R_Pinky1"],
+    ["DEF-thumb.02.R", "CC_Base_R_Thumb2"],
+    ["DEF-f_index.02.R", "CC_Base_R_Index2"],
+    ["DEF-f_middle.02.R", "CC_Base_R_Mid2"],
+    ["DEF-f_ring.02.R", "CC_Base_R_Ring2"],
+    ["DEF-f_pinky.02.R", "CC_Base_R_Pinky2"],
+    ["DEF-thumb.03.R", "CC_Base_R_Thumb3"],
+    ["DEF-f_index.03.R", "CC_Base_R_Index3"],
+    ["DEF-f_middle.03.R", "CC_Base_R_Mid3"],
+    ["DEF-f_ring.03.R", "CC_Base_R_Ring3"],
+    ["DEF-f_pinky.03.R", "CC_Base_R_Pinky3"],
+
+    ["DEF-tongue", "CC_Base_Tongue03"],
+    ["DEF-tongue.001", "CC_Base_Tongue02"],
+    ["DEF-tongue.002", "CC_Base_Tongue01"],
+
+    ["ORG-teeth.T", "CC_Base_Teeth01"],
+    ["ORG-teeth.B", "CC_Base_Teeth02"],
+
+    ["ORG-eye.R", "CC_Base_R_Eye"],
+    ["ORG-eye.L", "CC_Base_L_Eye"],
+
+    ["DEF-jaw", "CC_Base_JawRoot"],
+]
+
 
 # the rigify meta rig and the cc3 bones don't always match for roll angles,
 # correct them by copying from the cc3 bones and adjusting to match the orientation the meta rig expects.
@@ -128,6 +303,7 @@ ROLL_COPY = [
     ["spine.005", 0, "CC_Base_NeckTwist02"],
     ["spine.006", 0, "CC_Base_Head"], # todo
     ["face", 0, "CC_Base_FacialBone"], # todo
+    ["pelvis", -180, "CC_Base_Pelvis"],
 
     # Left Breast
     ["breast.L", 0, "CC_Base_L_Breast"],
@@ -135,7 +311,6 @@ ROLL_COPY = [
     ["breast.R", 0, "CC_Base_R_Breast"],
 
     # Left Leg:
-    ["pelvis.L", 180, "CC_Base_Pelvis"],
     ["thigh.L", 180, "CC_Base_L_Thigh"],
     ["shin.L", 180, "CC_Base_L_Calf"],
     ["foot.L", 180, "CC_Base_L_Foot"],
@@ -169,7 +344,6 @@ ROLL_COPY = [
     ["f_pinky.03.L", 90, "CC_Base_L_Pinky3"],
 
     # Right Leg, chain
-    ["pelvis.R", -180, "CC_Base_Pelvis"],
     ["thigh.R", -180, "CC_Base_R_Thigh"],
     ["shin.R", -180, "CC_Base_R_Calf"],
     ["foot.R", -180, "CC_Base_R_Foot"],
@@ -231,8 +405,7 @@ UV_TARGETS_CC3PLUS = [
     ["forehead.R", "DISCONNECTED",  [ [0.461, 0.740], [0.458, 0.678] ],
                                     [ [0.410, 0.741], [0.414, 0.682] ],
                                     [ [0.358, 0.725], [0.371, 0.660] ] ],
-
-    #["spine.006", "TAIL",           [0.746, 0.954]],
+    # set the top of the 'head' bone
     ["spine.006", "TAIL",           [0.688, 0.953]],
 ]
 
@@ -285,6 +458,74 @@ def find_metarig(objects):
             if "metarig" in obj.name and "spine" in obj.pose.bones:
                 return obj
     return None
+
+
+def prune_meta_rig(rig):
+    pelvis_r = rig.data.edit_bones["pelvis.R"]
+    rig.data.edit_bones.remove(pelvis_r)
+    rig.data.edit_bones["pelvis.L"].name = "pelvis"
+
+
+def add_def_bones(cc3_rig, rigify_rig):
+
+    # use the eye org bones to deform the eye vertex groups in the eye object
+    rigify_rig.data.bones["ORG-eye.R"].use_deform = True
+    rigify_rig.data.bones["ORG-eye.L"].use_deform = True
+    rigify_rig.data.bones["ORG-teeth.T"].use_deform = True
+    rigify_rig.data.bones["ORG-teeth.B"].use_deform = True
+
+    for def_copy in ADD_DEF_BONES:
+        src_bone_name = def_copy[0]
+        dst_bone_name = def_copy[1]
+        dst_bone_parent_name = def_copy[2]
+        relation_flags = def_copy[3]
+
+        if src_bone_name == "-": # means to reparent an existing deformation bone
+            if utils.edit_mode_to(rigify_rig):
+                dst_bone = rigify_rig.data.edit_bones[dst_bone_name]
+                if dst_bone_parent_name != "":
+                    parent_bone = rigify_rig.data.edit_bones[dst_bone_parent_name]
+                    dst_bone.parent = parent_bone
+                    dst_bone.use_connect = True if "C" in relation_flags else False
+                    dst_bone.use_local_location = True if "L" in relation_flags else False
+                    dst_bone.use_inherit_rotation = True if "R" in relation_flags else False
+        else:
+            if utils.edit_mode_to(cc3_rig):
+                utils.log_info("CC3 edit mode")
+                src_bone = cc3_rig.data.edit_bones[src_bone_name]
+                head_pos = cc3_rig.matrix_world @ src_bone.head
+                tail_pos = cc3_rig.matrix_world @ src_bone.tail
+                roll = src_bone.roll
+                if utils.edit_mode_to(rigify_rig):
+                    utils.log_info("Rigify edit mode")
+                    dst_bone = rigify_rig.data.edit_bones.new(dst_bone_name)
+                    dst_bone.head = head_pos
+                    dst_bone.tail = tail_pos
+                    dst_bone.roll = roll
+                    if dst_bone_parent_name != "":
+                        parent_bone = rigify_rig.data.edit_bones[dst_bone_parent_name]
+                        dst_bone.parent = parent_bone
+                        dst_bone.use_connect = True if "C" in relation_flags else False
+                        dst_bone.use_local_location = True if "L" in relation_flags else False
+                        dst_bone.use_inherit_rotation = True if "R" in relation_flags else False
+
+
+def rename_vertex_groups(cc3_rig, rigify_rig):
+
+    for obj in cc3_rig.children:
+
+        for vgrn in VERTEX_GROUP_RENAME:
+            vg_from = vgrn[1]
+            vg_to = vgrn[0]
+            try:
+                obj.vertex_groups[vg_from].name = vg_to
+            except:
+                pass
+
+        for mod in obj.modifiers:
+            if mod.type == "ARMATURE":
+                mod.object = rigify_rig
+                mod.use_deform_preserve_volume = True
 
 
 def store_relative_mappings(rig, coords):
@@ -637,6 +878,7 @@ def match_meta_rig(meta_rig, cc3_rig):
                 utils.set_active_object(meta_rig)
 
                 if utils.set_mode("EDIT"):
+                    prune_meta_rig(meta_rig)
                     store_relative_mappings(meta_rig, relative_coords)
 
                     for mapping in BONE_MAPPINGS:
@@ -682,6 +924,11 @@ class CC3Rigifier(bpy.types.Operator):
         else:
             utils.log_error("Not in OBJECT mode!", self)
 
+    def remap_vertex_groups(self, rigify_rig):
+        cc3_rig = utils.find_cc3_rig()
+        add_def_bones(cc3_rig, rigify_rig)
+        rename_vertex_groups(cc3_rig, rigify_rig)
+
     def execute(self, context):
 
         if self.param == "ADD_META_RIG":
@@ -689,6 +936,9 @@ class CC3Rigifier(bpy.types.Operator):
 
         if self.param == "GENERATE_RIGIFY":
             bpy.ops.pose.rigify_generate()
+
+        if self.param == "REMAP_VERTEX_GROUPS":
+            self.remap_vertex_groups(bpy.context.active_object)
 
         if self.param == "TEST":
             do_test()
@@ -723,5 +973,12 @@ class CC3RigifyPanel(bpy.types.Panel):
         row = layout.row()
         row.operator("cc3.rigifier", icon="EXPORT", text="Generate Rig").param = "GENERATE_RIGIFY"
 
+        layout.separator()
+        layout.label(text="Option 1.")
         row = layout.row()
-        row.operator("cc3.rigifier", icon="EXPORT", text="TEST").param = "TEST"
+        row.operator("cc3.rigifier", icon="EXPORT", text="Remap to Rigify").param = "REMAP_VERTEX_GROUPS"
+
+        layout.separator()
+        layout.label(text="Option 2.")
+        row = layout.row()
+        row.operator("cc3.rigifier", icon="EXPORT", text="TO DO").param = "TEST"
