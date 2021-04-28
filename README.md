@@ -13,3 +13,6 @@ Doesn't do anything with the vertex weights.
 This is what it does so far:
 https://youtu.be/lIYMxf9Us4U
 
+Mapping the vertex groups to the Rigify deformation bones:
+https://youtu.be/Luk4ANb1bWE
+
