@@ -906,13 +906,17 @@ class CC3Rigifier(bpy.types.Operator):
             options={"HIDDEN"}
         )
 
+    cc3_rig = None
+    meta_rig = None
+
     def add_meta_rig(self):
         if utils.set_mode("OBJECT"):
             bpy.ops.object.armature_human_metarig_add()
             meta_rig = utils.get_active_object()
+            self.meta_rig = meta_rig
             if meta_rig is not None:
                 meta_rig.location = (0,0,0)
-                cc3_rig = utils.find_cc3_rig()
+                cc3_rig = self.cc3_rig
                 if cc3_rig is not None:
                     cc3_rig.location = (0,0,0)
                     utils.rest_pose(cc3_rig)
@@ -925,11 +929,20 @@ class CC3Rigifier(bpy.types.Operator):
             utils.log_error("Not in OBJECT mode!", self)
 
     def remap_vertex_groups(self, rigify_rig):
-        cc3_rig = utils.find_cc3_rig()
+        cc3_rig = self.cc3_rig
         add_def_bones(cc3_rig, rigify_rig)
         rename_vertex_groups(cc3_rig, rigify_rig)
 
     def execute(self, context):
+
+        self.cc3_rig = utils.find_cc3_rig(bpy.context.selected_objects)
+        meta_rig = None
+        if self.cc3_rig:
+            for obj in bpy.context.selected_objects:
+                if obj.type == "ARMATURE" and obj != self.cc3_rig:
+                    meta_rig = obj
+                    self.meta_rig = meta_rig
+
 
         if self.param == "ADD_META_RIG":
             self.add_meta_rig()
@@ -937,8 +950,8 @@ class CC3Rigifier(bpy.types.Operator):
         if self.param == "GENERATE_RIGIFY":
             bpy.ops.pose.rigify_generate()
 
-        if self.param == "REMAP_VERTEX_GROUPS":
-            self.remap_vertex_groups(bpy.context.active_object)
+        if self.param == "REMAP_VERTEX_GROUPS" and self.meta_rig and self.cc3_rig:
+            self.remap_vertex_groups(meta_rig)
 
         if self.param == "TEST":
             do_test()

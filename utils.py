@@ -51,10 +51,8 @@ def edit_mode_to(obj):
     return False
 
 
-def find_cc3_rig():
-    cc3_import_props = bpy.context.scene.CC3ImportProps
-    for p in cc3_import_props.import_objects:
-        obj = p.object
+def find_cc3_rig(objects):
+    for obj in objects:
         if obj.type == "ARMATURE":
             if "Base_Spine01" in obj.pose.bones or "CC_Base_Spine01" in obj.pose.bones:
                 return obj
